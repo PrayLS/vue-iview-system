@@ -4,13 +4,19 @@
     <div class="login-content">
       <div class="login-title">后台管理系统</div>
         <div class="login-input">
-          <Input placeholder="Enter name" class="login-user">
-            <Icon type="md-person" slot="prefix" size="30" color="#0e9d5f"/>
-          </Input>
-          <Input placeholder="Enter keyword" class="login-keyword">
-            <Icon type="ios-lock" slot="prefix" size="30" color="#0e9d5f"/>
-          </Input>
-          <Button class="login-btn">
+          <Form ref="loginForm" :model="loginForm" :rules="rules" inline>
+            <FormItem prop="user">
+              <Input placeholder="Enter name" class="login-user" v-model="loginForm.user">
+                <Icon type="md-person" slot="prefix" size="30" color="#0e9d5f"/>
+              </Input>
+            </FormItem>
+            <FormItem prop="password">
+              <Input placeholder="Enter keyword" class="login-password" v-model="loginForm.password">
+                <Icon type="ios-lock" slot="prefix" size="30" color="#0e9d5f"/>
+              </Input>
+            </FormItem>
+          </Form>
+          <Button class="login-btn" @click="handleSumbit">
             立即登录
           </Button>
         </div>
@@ -18,7 +24,38 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      loginForm: {
+        user: '',
+        password: ''
+      },
+      rules: {
+        user: [
+          { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: 'Please fill in the password.', trigger: 'blur' },
+          { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    handleSumbit () {
+      this.$refs.loginForm.validate((vaild) => {
+        if (vaild) {
+          this.$Message.success('登录成功！')
+          localStorage.setItem('ms_username',this.loginForm.user);
+          this.$router.push('/');
+        } else {
+          this.$Message.error('登录失败！')
+        }
+      })
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -59,7 +96,7 @@ export default {};
     .login-input {
         width: 100%;
         height: 300px;
-        .login-user,.login-keyword {
+        .login-user,.login-password {
           margin-top: 30px;
           width: 300px;
           margin-left: 75px;
