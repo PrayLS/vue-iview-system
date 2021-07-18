@@ -5,7 +5,7 @@
       <span v-else class="iconfont large">&#xe615;</span>
     </div>
     <div class="header-logo">
-      后台管理系统
+      博客管理系统
     </div>
     <div class="header-right-content">
       <div class="header-edit">
